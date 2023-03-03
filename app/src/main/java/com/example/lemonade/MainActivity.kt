@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
@@ -57,25 +58,18 @@ fun LemonadeWithButtonAndImage(modifier: Modifier = Modifier
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         Text(text = stringResource(descriptions[currentImageIndex]), fontSize = 18.sp)
         Spacer(modifier = Modifier.height(16.dp))
-        if (currentImageIndex == 1) {
-            if (clickCount < clickThreshold) {
-                Button(onClick = { clickCount++ }) {
-                    Image(
-                        painter = painterResource(id = images[currentImageIndex]),
-                        contentDescription = null
-                    )
-                }
+        Button(onClick = {
+            if (currentImageIndex == 1 && clickCount != clickThreshold) {
+                clickCount += 1
             } else {
-                currentImageIndex++
+                currentImageIndex = (currentImageIndex + 1) % images.size
                 clickCount = 0
             }
-        } else {
-            Button(onClick = { currentImageIndex = (currentImageIndex + 1) % images.size }) {
-                Image(
-                    painter = painterResource(id = images[currentImageIndex]),
-                    contentDescription = null
-                )
-            }
+        }) {
+            Image(
+                painter = painterResource(id = images[currentImageIndex]),
+                contentDescription = null
+            )
         }
     }
 }
